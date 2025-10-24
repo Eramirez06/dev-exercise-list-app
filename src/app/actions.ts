@@ -9,12 +9,20 @@ export const addItemAction = async (formData: FormData): Promise<void> => {
   const name = formData.get('name') as string
   const description = formData.get('description') as string
   const photoUrlRaw = formData.get('photoUrl') as string | null
-  const categoryIdRaw = formData.get('categoryId') as string | null
+  const categoryIdsRaw = formData.getAll('categoryIds') as string[]
 
-  // Clean photoUrl and categoryId - remove whitespace, newlines, etc. and convert empty strings to null
+  // Clean photoUrl - remove whitespace, newlines, etc. and convert empty strings to null
   const photoUrl = photoUrlRaw?.trim() || null
-  const categoryId = categoryIdRaw?.trim() || null
 
-  await createItem(authUser, name, description, photoUrl, categoryId)
+  // Clean categoryIds - filter out empty strings and trim
+  const categoryIds = categoryIdsRaw.map((id) => id.trim()).filter((id) => id !== '')
+
+  await createItem(
+    authUser,
+    name,
+    description,
+    photoUrl,
+    categoryIds.length > 0 ? categoryIds : undefined,
+  )
   revalidatePath('/')
 }

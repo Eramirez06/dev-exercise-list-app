@@ -28,16 +28,19 @@ export default async function Page({ params }: { params: { id: string } }) {
           )}
           <Grid item xs={12} md={itemDetails.photoUrl ? 7 : 12}>
             <Stack spacing={3}>
-              {itemDetails.category && (
-                <Box>
-                  <Chip
-                    label={itemDetails.category.name}
-                    color="primary"
-                    variant="outlined"
-                    component="a"
-                    href={`/dashboard/category/${itemDetails.category.id}`}
-                    clickable
-                  />
+              {itemDetails.categories.length > 0 && (
+                <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                  {itemDetails.categories.map((category) => (
+                    <Chip
+                      key={category.id}
+                      label={category.name}
+                      color="primary"
+                      variant="outlined"
+                      component="a"
+                      href={`/dashboard/category/${category.id}`}
+                      clickable
+                    />
+                  ))}
                 </Box>
               )}
               <Typography variant="h4">{itemDetails.name}</Typography>

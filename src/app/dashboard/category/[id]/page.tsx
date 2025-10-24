@@ -17,7 +17,7 @@ export default async function Page({ params }: { params: { id: string } }) {
       {category ? (
         <Stack spacing={3} sx={{ mt: 3 }}>
           <Box>
-            <Chip label={category.name} color="primary" size="large" />
+            <Chip label={category.name} color="primary" />
           </Box>
           {category.description && (
             <Typography color="text.secondary">{category.description}</Typography>

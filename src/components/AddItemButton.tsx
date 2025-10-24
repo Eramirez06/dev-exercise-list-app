@@ -30,9 +30,8 @@ export const AddItemButton = () => {
   const { enqueueSnackbar } = useSnackbar()
   const [open, setOpen] = useState(false)
   const [categories, setCategories] = useState<Category[]>([])
-  const [selectedCategory, setSelectedCategory] = useState<string>('')
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const photoUrlInputRef = useRef<HTMLInputElement>(null)
-  const categoryIdInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     // Load categories when component mounts
@@ -53,14 +52,10 @@ export const AddItemButton = () => {
   const handleOpen = () => setOpen(true)
   const handleClose = () => {
     setOpen(false)
-    setSelectedCategory('')
+    setSelectedCategories([])
     // Reset photo URL when closing
     if (photoUrlInputRef.current) {
       photoUrlInputRef.current.value = ''
-    }
-    // Reset category when closing
-    if (categoryIdInputRef.current) {
-      categoryIdInputRef.current.value = ''
     }
   }
 
@@ -101,24 +96,30 @@ export const AddItemButton = () => {
                 multiline={true}
                 rows={4}
               />
-              <input type="hidden" name="categoryId" ref={categoryIdInputRef} />
+              {selectedCategories.map((categoryId) => (
+                <input key={categoryId} type="hidden" name="categoryIds" value={categoryId} />
+              ))}
               <FormControl fullWidth>
-                <InputLabel id="category-label">Category</InputLabel>
+                <InputLabel id="categories-label">Categories</InputLabel>
                 <Select
-                  labelId="category-label"
-                  value={selectedCategory}
-                  label="Category"
+                  labelId="categories-label"
+                  multiple
+                  value={selectedCategories}
+                  label="Categories"
                   onChange={(e) => {
                     const value = e.target.value
-                    setSelectedCategory(value)
-                    if (categoryIdInputRef.current) {
-                      categoryIdInputRef.current.value = value
+                    setSelectedCategories(typeof value === 'string' ? value.split(',') : value)
+                  }}
+                  renderValue={(selected) => {
+                    if (selected.length === 0) {
+                      return <em>None</em>
                     }
+                    return categories
+                      .filter((cat) => selected.includes(cat.id))
+                      .map((cat) => cat.name)
+                      .join(', ')
                   }}
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
                   {categories.map((category) => (
                     <MenuItem key={category.id} value={category.id}>
                       {category.name}
