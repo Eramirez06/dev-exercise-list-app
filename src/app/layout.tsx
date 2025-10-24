@@ -1,3 +1,4 @@
+import { CategoriesMenu } from '@/components/CategoriesMenu'
 import { SnackbarClientProvider } from '@/components/SnackbarClientProvider'
 import { ClerkProvider, SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 import { AppBar, Box, Button, CssBaseline, Toolbar, Typography } from '@mui/material'
@@ -39,14 +40,19 @@ export default function RootLayout({
                         alignItems: 'center',
                       }}
                     >
-                      <Typography
-                        variant="h6"
-                        sx={{ color: 'text.primary', textDecoration: 'none' }}
-                        component={NextLink}
-                        href="/"
-                      >
-                        List App
-                      </Typography>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Typography
+                          variant="h6"
+                          sx={{ color: 'text.primary', textDecoration: 'none' }}
+                          component={NextLink}
+                          href="/"
+                        >
+                          List App
+                        </Typography>
+                        <SignedIn>
+                          <CategoriesMenu />
+                        </SignedIn>
+                      </Box>
                       <Box>
                         <SignedOut>
                           <SignInButton>
