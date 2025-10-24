@@ -15,14 +15,27 @@ datasource db {
 
 
 model ListItem {
-  id        String   @id @default(uuid())
-  name      String
+  id          String    @id @default(uuid())
+  name        String
   description String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt  
-  authorId  String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt  
+  authorId    String
+  photoUrl    String?
+  categoryId  String?
+  category    Category? @relation(fields: [categoryId], references: [id])
 
   @@index([authorId])
+  @@index([categoryId])
+}
+
+model Category {
+  id          String     @id @default(uuid())
+  name        String
+  description String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  listItems   ListItem[]
 }
 
 
